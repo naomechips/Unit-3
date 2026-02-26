@@ -1,16 +1,33 @@
 name: CI on Main
-# This defines the event that triggers the workflow
 on:
   push:
     branches:
       - main
 
 jobs:
-  build:
+  # Job 1: Check the code for errors
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run a script
-        run: echo "Code pushed to main! Starting build..."
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Linter/Tests
+        run: npm test  # Or your validation command
+
+  # Job 2: Build the website
+  build:
+    runs-on: ubuntu-latest
+    needs: validate  # This ensures build ONLY runs if validate passes
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build site
+        run: npm run build
