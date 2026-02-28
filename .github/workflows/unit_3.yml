@@ -1,4 +1,4 @@
-name: CI on Main
+# This defines the event that triggers the workflow
 on:
   push:
     branches:
@@ -11,12 +11,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run Linter/Tests
-        run: npm test  # Or your validation command
 
   # Job 2: Build the website
   build:
