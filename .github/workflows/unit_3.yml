@@ -1,27 +1,30 @@
-# This defines the event that triggers the workflow
+name: CI Pipeline
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  # Job 1: Check the code for errors
   validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-  # Job 2: Build the website
-  build:
-    runs-on: ubuntu-latest
-    needs: validate  # This ensures build ONLY runs if validate passes
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build site
-        run: npm run build
+      - name: Run validation
+        run: npm run validate # Replace with a validation command
+
+  build:
+    runs-on: ubuntu-latest
+    needs: validate       # This ensures build runs after validation
+    if: success()        # This ensures build runs only if validate was successful
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build project
+        run: npm run build # Replace with a build command
